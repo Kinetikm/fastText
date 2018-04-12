@@ -9,14 +9,12 @@
 
 CXX = c++
 CXXFLAGS = -pthread -std=c++0x -march=native
-OBJS = args.o dictionary.o matrix.o vector.o utils.o fasttext.o
 INCLUDES = -I.
+LIBNAME = fastText
+LIBOBJS = args.o dictionary.o matrix.o vector.o utils.o fasttext.o main.o
 
 opt: CXXFLAGS += -O3 -funroll-loops
-opt: fasttext
-
-debug: CXXFLAGS += -g -O0 -fno-inline
-debug: fasttext
+opt: $(LIBNAME).a
 
 args.o: src/args.cc src/args.h
 	$(CXX) $(CXXFLAGS) -c src/args.cc
@@ -36,8 +34,11 @@ utils.o: src/utils.cc src/utils.h
 fasttext.o: src/fasttext.cc src/*.h
 	$(CXX) $(CXXFLAGS) -c src/fasttext.cc
 
-fasttext: $(OBJS) src/fasttext.cc
-	$(CXX) $(CXXFLAGS) $(OBJS) src/main.cc -o fasttext
+main.o: src/main.cc src/*.h
+	$(CXX) $(CXXFLAGS) -c src/main.cc
+
+$(LIBNAME).a: $(LIBOBJS)
+	 ar rcs $(LIBNAME).a $^
 
 clean:
-	rm -rf *.o fasttext
+	rm -rf *.o fasttext $(LIBNAME).a
