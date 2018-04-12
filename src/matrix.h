@@ -61,17 +61,6 @@ class Matrix {
     return n_;
   }
   void zero();
-  void uniform(real);
-  real dotRow(const Vector&, int64_t) const;
-  void addRow(const Vector&, int64_t, real);
-
-  void multiplyRow(const Vector& nums, int64_t ib = 0, int64_t ie = -1);
-  void divideRow(const Vector& denoms, int64_t ib = 0, int64_t ie = -1);
-
-  real l2NormRow(int64_t i) const;
-  void l2NormRow(Vector& norms) const;
-
-  void save(std::ostream&);
   void load(std::istream&);
 
   void dump(std::ostream&) const;
