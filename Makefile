@@ -8,7 +8,7 @@
 #
 
 CXX = c++
-CXXFLAGS = -pthread -std=c++0x -march=native
+CXXFLAGS = -pthread -std=c++0x -march=core2
 INCLUDES = -I.
 LIBNAME = fastText
 LIBOBJS = args.o dictionary.o matrix.o vector.o utils.o fasttext.o main.o
