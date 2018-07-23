@@ -9,6 +9,8 @@
 #include <stdexcept>
 #include <numeric>
 
+#include <stdlib.h>
+
 
 namespace fasttext {
 
@@ -84,6 +86,38 @@ void FastText::loadModel(const std::string& filename) {
   }
   loadModel(ifs);
   ifs.close();
+}
+
+void FastText::loadModel(const std::string& filename, const std::string& idfs_filename) {
+  std::ifstream ifs(filename, std::ifstream::binary);
+  if (!ifs.is_open()) {
+    throw std::invalid_argument(filename + " cannot be opened for loading!");
+  }
+  if (!checkModel(ifs)) {
+    throw std::invalid_argument(filename + " has wrong file format!");
+  }
+  loadModel(ifs);
+  ifs.close();
+  std::string line;
+  std::ifstream idfIfs(idfs_filename);
+  if (!idfIfs.is_open()) {
+    throw std::invalid_argument(filename + " cannot be opened for loading!");
+  }
+  idfs_weights_ = true;
+  idfs_mapping_ = std::map<std::string, double>;
+  while(idfIfs>>line){
+      std::stringstream ss(line);
+      std::string item;
+      std::vector<std::string> splits;
+      while (std::getline(ss, item, ' ')) {
+          *(splits++) = item;
+      }
+      if (splits.size()<2){
+          continue;
+      }
+      idfs_mapping_[splits[0]] = strtod((splits[1]).c_str(),0);
+  }
+  idfIfs.close();
 }
 
 void FastText::loadModel(std::istream& in) {

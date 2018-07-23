@@ -18,6 +18,7 @@
 #include <iostream>
 #include <queue>
 #include <tuple>
+#include <map>
 
 #include "args.h"
 #include "dictionary.h"
@@ -35,6 +36,8 @@ class FastText {
 
   std::shared_ptr<Matrix> input_;
   std::shared_ptr<Matrix> output_;
+  std::map<std::string, double> idfs_mapping_;
+  bool idfs_weights_ = false;
   int32_t version;
   bool checkModel(std::istream&);
 
@@ -47,6 +50,7 @@ class FastText {
   void saveOutput();
   void loadModel(std::istream&);
   void loadModel(const std::string&);
+  void loadModel(const std::string&, const std::string&);
   int getDimension() const;
   void getSentenceVector(std::string sentence, Vector&);
 };
